@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import com.devloper.squad.navigation.Navigator
 import com.devloper.squad.search_feature.domain.model.UserItem
 import com.devloper.squad.search_feature.domain.repository.GitRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -22,6 +23,9 @@ class UsersViewModel(
 
     // To not provide possibility of emitting data from Views we provide immutable interface
     val uiState: StateFlow<UserViewState> = _uiState
+
+    private val _message = MutableSharedFlow<Message>()
+    val message = _message
 
     // For clean view it would be better to move each case to appropriate function
     fun onEvent(event: UsersEvent) {
@@ -47,12 +51,17 @@ class UsersViewModel(
                 }
             }
 
-            is UsersEvent.ResetSearch -> {
+            is UsersEvent.OnResetSearch -> {
                 setState(
                     currentState().copy(
                         data = PagingData.empty()
                     )
                 )
+            }
+            UsersEvent.OnError -> {
+                // Instead of string we need to pass some Id to fetch string through resources.
+                // But for now it's okay
+                setMessage { Message.ShowMessage("Request limit is 10 per minute. Try later") }
             }
         }
     }
@@ -63,10 +72,21 @@ class UsersViewModel(
 
     private fun currentState() = _uiState.value
 
+    // To display message once we need to use SharedFlow
+    private fun setMessage(builder: () -> Message) {
+        val effectValue = builder()
+        viewModelScope.launch { _message.emit(effectValue) }
+    }
+
+    sealed class Message {
+        data class ShowMessage(val message: String) : Message()
+    }
+
     sealed class UsersEvent {
         data class OnSearch(val query: String) : UsersEvent()
         data class OnDetailPage(val login: String) : UsersEvent()
-        object ResetSearch : UsersEvent()
+        object OnResetSearch : UsersEvent()
+        object OnError : UsersEvent()
     }
 
     // Here we can use domain model, as for example. It depends, in many cases we can avoid of creating

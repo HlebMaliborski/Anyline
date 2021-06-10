@@ -18,13 +18,12 @@ class NetworkPagingSource(
     private val mapper: UserDataToDomainMapper
 ) : PagingSource<Int, UserItem>() {
 
-    private var loadedItems = 0
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UserItem> {
         val page = params.key ?: STARTING_PAGE
         return try {
             val response = service.searchUsers(query, page, NETWORK_PAGE_SIZE)
+            Log.d("Ura1", response.toString())
             val items = response.items
-            loadedItems += items.size
             val nextKey = if (items.isEmpty()) {
                 null
             } else {
