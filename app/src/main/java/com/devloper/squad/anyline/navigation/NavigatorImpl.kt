@@ -6,10 +6,9 @@ import com.devloper.squad.anyline.R
 import com.devloper.squad.navigation.LOGIN
 import com.devloper.squad.navigation.Navigator
 
-/**
- * As we have only one module it's okay to have navigator in the app module. Maybe in future
- * it would be better to move navigation functionality into separate module.
- */
+// As we have only one module it's okay to have navigator in the app module. Maybe in future
+// it would be better to move navigation functionality into separate module.
+
 class NavigatorImpl(private val navController: NavController) :
     Navigator {
 

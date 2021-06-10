@@ -37,14 +37,15 @@ class UsersViewModel(
             }
 
             is UsersEvent.OnSearch -> {
-                setState(UserViewState(showProgress = true))
+                setState(UserViewState(showProgress = true, scrollList = false))
                 viewModelScope.launch {
                     repository.searchUsers(false, event.query)
                         .cachedIn(viewModelScope).collectLatest {
                             setState(
                                 currentState().copy(
                                     data = it,
-                                    showProgress = false
+                                    showProgress = false,
+                                    scrollList = false
                                 )
                             )
                         }
@@ -54,7 +55,8 @@ class UsersViewModel(
             is UsersEvent.OnResetSearch -> {
                 setState(
                     currentState().copy(
-                        data = PagingData.empty()
+                        data = PagingData.empty(),
+                        scrollList = false
                     )
                 )
             }
@@ -62,6 +64,13 @@ class UsersViewModel(
                 // Instead of string we need to pass some Id to fetch string through resources.
                 // But for now it's okay
                 setMessage { Message.ShowMessage("Request limit is 10 per minute. Try later") }
+            }
+            UsersEvent.OnScrollList -> {
+                setState(
+                    currentState().copy(
+                        scrollList = true
+                    )
+                )
             }
         }
     }
@@ -87,6 +96,7 @@ class UsersViewModel(
         data class OnDetailPage(val login: String) : UsersEvent()
         object OnResetSearch : UsersEvent()
         object OnError : UsersEvent()
+        object OnScrollList : UsersEvent()
     }
 
     // Here we can use domain model, as for example. It depends, in many cases we can avoid of creating
@@ -94,6 +104,7 @@ class UsersViewModel(
 
     data class UserViewState(
         val data: PagingData<UserItem>? = null,
-        val showProgress: Boolean = false
+        val showProgress: Boolean = false,
+        val scrollList: Boolean = false
     )
 }

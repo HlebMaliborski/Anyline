@@ -20,6 +20,9 @@ import com.devloper.squad.search_feature.presentation.viewmodel.UsersViewModel
 import kotlinx.android.synthetic.main.fragment_search.searchRecyclerView
 import kotlinx.android.synthetic.main.fragment_search.userProgressBar
 import kotlinx.android.synthetic.main.fragment_search.userSearch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -51,6 +54,13 @@ class UsersFragment : Fragment() {
 
         searchAdapter.loadStateFlow.observeWhenStarted(lifecycleScope) { loadStates ->
             handleLoadState(loadStates.refresh)
+        }
+
+        lifecycleScope.launch {
+            searchAdapter.loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .filter { it.refresh is LoadState.NotLoading }
+                .collectLatest { viewModel.onEvent(UsersViewModel.UsersEvent.OnScrollList) }
         }
     }
 
@@ -114,6 +124,9 @@ class UsersFragment : Fragment() {
             lifecycleScope.launch {
                 searchAdapter.submitData(viewState.data)
             }
+        }
+        if (viewState.scrollList) {
+            searchRecyclerView?.scrollToPosition(0)
         }
         userProgressBar.visibility(viewState.showProgress)
     }

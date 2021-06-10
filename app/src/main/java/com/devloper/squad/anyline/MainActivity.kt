@@ -12,7 +12,6 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
 
-    private val navigator: Navigator by inject()
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
@@ -21,13 +20,5 @@ class MainActivity : AppCompatActivity() {
         val navController =
             (supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment).navController
         getKoin().declare(NavigatorImpl(navController), override = true)
-    }
-
-    override fun onBackPressed() {
-        lifecycleScope.launch {
-            navigator.pop {
-                finishAfterTransition()
-            }
-        }
     }
 }

@@ -20,21 +20,6 @@ class UserRepositoryImpl(
     private val apiService: ApiService
 ) : UserRepository {
 
-/*    override suspend fun searchUsers(reloadData: Boolean, query: String): Flow<Users> {
-        // Right now we will always make a request to BE to retrieve data, but it would be better
-        // to implement cache DataSource to not have requests to frequent. Or, as for alternative we can
-        // use StateFlow here instead of cache DataSource
-
-        //Also, there is should be check for internet connection before call API
-        return flow {
-            emit(mapper.map(networkDataSource.searchUsers(query)))
-        }.catch { exception ->
-            Log.d("Ura", exception.toString())
-            // We can handle situation if BE returns us some exception or whatever.
-            // For example in case of error we can return cached data. Or error code.
-        }
-    }*/
-
     override suspend fun getUser(login: String): UserDetail {
         return try {
             mapperDetail.map(networkDataSource.getUser(login))
