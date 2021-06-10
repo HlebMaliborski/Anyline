@@ -10,15 +10,15 @@ import com.devloper.squad.search_feature.data.mapper.UserDataToDomainMapper
 import com.devloper.squad.search_feature.data.mapper.UserDetailDataToDomainMapper
 import com.devloper.squad.search_feature.domain.model.UserDetail
 import com.devloper.squad.search_feature.domain.model.UserItem
-import com.devloper.squad.search_feature.domain.repository.GitRepository
+import com.devloper.squad.search_feature.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 
-class GitRepositoryImpl(
+class UserRepositoryImpl(
     private val networkDataSource: NetworkDataSource,
     private val mapper: UserDataToDomainMapper,
     private val mapperDetail: UserDetailDataToDomainMapper,
     private val apiService: ApiService
-) : GitRepository {
+) : UserRepository {
 
 /*    override suspend fun searchUsers(reloadData: Boolean, query: String): Flow<Users> {
         // Right now we will always make a request to BE to retrieve data, but it would be better
@@ -49,13 +49,13 @@ class GitRepositoryImpl(
 
     override fun searchUsers(reloadData: Boolean, query: String): Flow<PagingData<UserItem>> {
         return Pager(
-            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false, initialLoadSize = 1),
+            config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false, initialLoadSize = 1),
             pagingSourceFactory = { NetworkPagingSource(apiService, query, mapper) }
         ).flow
     }
 
     companion object {
 
-        const val NETWORK_PAGE_SIZE = 10
+        const val PAGE_SIZE = 10
     }
 }

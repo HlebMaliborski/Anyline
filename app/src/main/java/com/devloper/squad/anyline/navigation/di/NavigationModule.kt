@@ -5,5 +5,5 @@ import com.devloper.squad.navigation.Navigator
 import org.koin.dsl.module
 
 val NavigationModule = module {
-    single<Navigator> { get<NavigatorImpl>() }
+    factory<Navigator> { get<NavigatorImpl>() }
 }

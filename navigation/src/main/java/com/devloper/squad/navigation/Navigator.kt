@@ -7,4 +7,5 @@ const val LOGIN = "login"
 interface Navigator {
 
     suspend fun openDetailView(login: String)
+    suspend fun pop(block: () -> Unit)
 }

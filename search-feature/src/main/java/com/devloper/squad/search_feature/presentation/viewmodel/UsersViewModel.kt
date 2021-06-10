@@ -6,7 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.devloper.squad.navigation.Navigator
 import com.devloper.squad.search_feature.domain.model.UserItem
-import com.devloper.squad.search_feature.domain.repository.GitRepository
+import com.devloper.squad.search_feature.domain.repository.UserRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class UsersViewModel(
     private val navigator: Navigator,
-    private val repository: GitRepository
+    private val repository: UserRepository
 ) : ViewModel() {
 
     private val initialState: UserViewState by lazy { UserViewState() }

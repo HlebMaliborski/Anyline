@@ -5,7 +5,7 @@ import com.devloper.squad.search_feature.domain.model.UserDetail
 import com.devloper.squad.search_feature.domain.model.UserItem
 import kotlinx.coroutines.flow.Flow
 
-interface GitRepository {
+interface UserRepository {
 
     suspend fun getUser(login: String): UserDetail
 

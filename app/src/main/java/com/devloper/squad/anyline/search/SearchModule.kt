@@ -9,8 +9,8 @@ import com.devloper.squad.search_feature.data.mapper.UserDataToDomainMapper
 import com.devloper.squad.search_feature.data.mapper.UserDataToDomainMapperImpl
 import com.devloper.squad.search_feature.data.mapper.UserDetailDataToDomainMapper
 import com.devloper.squad.search_feature.data.mapper.UserDetailDataToDomainMapperImpl
-import com.devloper.squad.search_feature.data.repository.GitRepositoryImpl
-import com.devloper.squad.search_feature.domain.repository.GitRepository
+import com.devloper.squad.search_feature.data.repository.UserRepositoryImpl
+import com.devloper.squad.search_feature.domain.repository.UserRepository
 import com.devloper.squad.search_feature.domain.usecase.GetUserUseCase
 import com.devloper.squad.search_feature.presentation.viewmodel.UserDetailViewModel
 import com.devloper.squad.search_feature.presentation.viewmodel.UsersViewModel
@@ -25,8 +25,8 @@ val SearchModule = module {
     single<NetworkDataSource> { NetworkDataSourceImpl(apiService = get()) }
     single<UserDataToDomainMapper> { UserDataToDomainMapperImpl() }
     single<UserDetailDataToDomainMapper> { UserDetailDataToDomainMapperImpl() }
-    single<GitRepository> {
-        GitRepositoryImpl(
+    single<UserRepository> {
+        UserRepositoryImpl(
             networkDataSource = get(),
             mapper = get(),
             mapperDetail = get(),

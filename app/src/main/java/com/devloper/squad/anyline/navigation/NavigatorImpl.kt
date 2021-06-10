@@ -17,5 +17,13 @@ class NavigatorImpl(private val navController: NavController) :
         val bundle = bundleOf(LOGIN to login)
         navController.navigate(R.id.searchDetailFragment, bundle)
     }
+
+    override suspend fun pop(block: () -> Unit) {
+        if (navController.popBackStack().not()) {
+            block()
+        } else {
+            navController.popBackStack()
+        }
+    }
 }
 
