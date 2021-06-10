@@ -1,5 +1,6 @@
 package com.devloper.squad.search_feature.data.datasource
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.devloper.squad.search_feature.data.api.ApiService
@@ -27,6 +28,9 @@ class NetworkPagingSource(
             } else {
                 page + (params.loadSize / PAGE_SIZE)
             }
+
+            Log.d("NetworkPaging Page", nextKey.toString())
+            Log.d("NetworkPaging Load size", params.loadSize.toString())
 
             LoadResult.Page(
                 data = mapper.map(items),

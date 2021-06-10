@@ -6,19 +6,19 @@ import android.view.ViewGroup
 import coil.load
 import com.devloper.squad.base.presentation.recyclerview.BaseViewHolder
 import com.devloper.squad.search_feature.R
+import com.devloper.squad.search_feature.databinding.ItemSearchBinding
 import com.devloper.squad.search_feature.domain.model.UserItem
-import kotlinx.android.synthetic.main.item_search.logo
-import kotlinx.android.synthetic.main.item_search.userName
-import kotlinx.android.synthetic.main.item_search.userUrl
 
 class UsersViewHolder(override val containerView: View, private val listener: ((item: UserItem) -> Unit)?) :
     BaseViewHolder<UserItem>(containerView) {
 
-    override fun bind(data: UserItem) {
-        userName.text = data.login
-        userUrl.text = data.htmlUrl
+    private val binding = ItemSearchBinding.bind(itemView)
 
-        logo.load(data.avatarUrl)
+    override fun bind(data: UserItem) {
+        binding.userName.text = data.login
+        binding.userUrl.text = data.htmlUrl
+
+        binding.logo.load(data.avatarUrl)
 
         if (listener != null) {
             containerView.setOnClickListener {

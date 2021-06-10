@@ -10,24 +10,29 @@ import coil.load
 import com.devloper.squad.base.presentation.observeWhenCreated
 import com.devloper.squad.base.presentation.visibility
 import com.devloper.squad.navigation.LOGIN
-import com.devloper.squad.search_feature.R
+import com.devloper.squad.search_feature.databinding.FragmentUserDetailBinding
 import com.devloper.squad.search_feature.domain.model.UserDetail
 import com.devloper.squad.search_feature.presentation.viewmodel.UserDetailViewModel
-import kotlinx.android.synthetic.main.fragment_user_detail.userCompany
-import kotlinx.android.synthetic.main.fragment_user_detail.userLogo
-import kotlinx.android.synthetic.main.fragment_user_detail.userName
-import kotlinx.android.synthetic.main.fragment_user_detail.userUrl
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UserDetailFragment : Fragment() {
 
     private val viewModel: UserDetailViewModel by viewModel()
 
+    private var _binding: FragmentUserDetailBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_user_detail, container, false)
+    ): View {
+        _binding = FragmentUserDetailBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,21 +47,21 @@ class UserDetailFragment : Fragment() {
 
     private fun renderState(userDetail: UserDetail?) {
         userDetail?.let {
-            userLogo.load(it.avatarUrl)
+            binding.userLogo.load(it.avatarUrl)
 
             if (it.name != null) {
-                userName.text = it.name
-                userName.visibility(true)
+                binding.userName.text = it.name
+                binding.userName.visibility(true)
             }
 
             if (it.company != null) {
-                userCompany.text = it.company
-                userCompany.visibility(true)
+                binding.userCompany.text = it.company
+                binding.userCompany.visibility(true)
             }
 
             if (it.htmlUrl != null) {
-                userUrl.text = it.htmlUrl
-                userUrl.visibility(true)
+                binding.userUrl.text = it.htmlUrl
+                binding.userUrl.visibility(true)
             }
         }
     }

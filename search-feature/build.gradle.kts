@@ -7,6 +7,11 @@ plugins {
 androidExtensions {
     isExperimental = true
 }
+android {
+    buildFeatures {
+        viewBinding = true
+    }
+}
 dependencies {
     implementation(project(":base"))
     implementation(project(":navigation"))
@@ -26,8 +31,9 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
     implementation("androidx.paging:paging-runtime-ktx:3.0.0")
-    implementation(TestDependencies.jupiterApi)
     implementation ("io.anyline:anylinesdk:31.0.0")
+
+    implementation(TestDependencies.jupiterApi)
 
     apply(from = "$rootDir/gradle/base-dependencies.gradle.kts")
 }

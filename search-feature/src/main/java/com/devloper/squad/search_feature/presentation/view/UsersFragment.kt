@@ -14,12 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.devloper.squad.base.presentation.DebouncingQueryTextListener
 import com.devloper.squad.base.presentation.observeWhenStarted
 import com.devloper.squad.base.presentation.visibility
-import com.devloper.squad.search_feature.R
+import com.devloper.squad.search_feature.databinding.FragmentSearchBinding
 import com.devloper.squad.search_feature.presentation.recyclerview.UsersAdapter
 import com.devloper.squad.search_feature.presentation.viewmodel.UsersViewModel
-import kotlinx.android.synthetic.main.fragment_search.searchRecyclerView
-import kotlinx.android.synthetic.main.fragment_search.userProgressBar
-import kotlinx.android.synthetic.main.fragment_search.userSearch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
@@ -29,6 +26,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class UsersFragment : Fragment() {
 
     private val viewModel: UsersViewModel by viewModel()
+
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
     private val searchAdapter: UsersAdapter by lazy {
         UsersAdapter().apply {
@@ -55,7 +55,13 @@ class UsersFragment : Fragment() {
         }
 
         searchAdapter.loadStateFlow.observeWhenStarted(lifecycleScope) { loadStates ->
-            handleLoadState(loadStates.refresh)
+            val errorState = loadStates.source.append as? LoadState.Error
+                             ?: loadStates.source.prepend as? LoadState.Error
+                             ?: loadStates.append as? LoadState.Error
+                             ?: loadStates.prepend as? LoadState.Error
+            if (errorState != null) {
+                viewModel.onEvent(UsersViewModel.UsersEvent.OnError)
+            }
         }
 
         lifecycleScope.launch {
@@ -69,8 +75,14 @@ class UsersFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_search, container, false)
+    ): View {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,10 +96,10 @@ class UsersFragment : Fragment() {
     }
 
     private fun initSearchView() {
-        userSearch.setOnQueryTextListener(
+        binding.userSearch.setOnQueryTextListener(
             DebouncingQueryTextListener(
                 lifecycle, additionalAction = {
-                    userSearch.clearFocus()
+                    binding.userSearch.clearFocus()
                 }
             ) { newText ->
                 newText?.let {
@@ -102,22 +114,12 @@ class UsersFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        searchRecyclerView.apply {
+        binding.searchRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = searchAdapter
             setHasFixedSize(true)
             itemAnimator = null
             isMotionEventSplittingEnabled = false
-        }
-    }
-
-    // Need to move this logic to viewModel and create
-    private fun handleLoadState(state: LoadState) {
-        when (state) {
-            is LoadState.Error -> {
-                viewModel.onEvent(UsersViewModel.UsersEvent.OnError)
-            }
-            else -> Log.d("Request state", state.toString())
         }
     }
 
@@ -128,8 +130,8 @@ class UsersFragment : Fragment() {
             }
         }
         if (viewState.scrollList) {
-            searchRecyclerView?.scrollToPosition(0)
+            binding.searchRecyclerView?.scrollToPosition(0)
         }
-        userProgressBar.visibility(viewState.showProgress)
+        binding.userProgressBar.visibility(viewState.showProgress)
     }
 }
