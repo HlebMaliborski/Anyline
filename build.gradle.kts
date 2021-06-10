@@ -14,6 +14,8 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenCentral()
+        maven("https://anylinesdk.blob.core.windows.net/maven/")
         google()
         jcenter()
     }

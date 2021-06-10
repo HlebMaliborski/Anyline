@@ -13,8 +13,11 @@ android {
         minSdkVersion(AndroidVersions.minSdkVersion)
         targetSdkVersion(AndroidVersions.targetSdkVersion)
         versionCode = AppVersion.versionCode
-        versionName =  AppVersion.versionName
-
+        versionName = AppVersion.versionName
+        //multiDexEnabled = true
+/*        ndk {
+            abiFilters("armeabi-v7a", "arm64-v8a")
+        }*/
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -34,7 +37,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    packagingOptions{
+    packagingOptions {
         exclude("META-INF/proguard/androidx-annotations.pro")
         exclude("META-INF/DEPENDENCIES")
         exclude("META-INF/LICENSE")

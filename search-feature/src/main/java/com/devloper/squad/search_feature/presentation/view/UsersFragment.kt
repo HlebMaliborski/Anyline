@@ -40,6 +40,8 @@ class UsersFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // To use anyline SDK just to uncomment line
+        //AnylineSDK.init(getString(R.string.anyline_license_key), context)
         viewModel.uiState.observeWhenStarted(lifecycleScope) { viewState ->
             renderState(viewState)
         }

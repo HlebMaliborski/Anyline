@@ -17,7 +17,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
     implementation("io.coil-kt:coil:1.2.1")
-    implementation("io.coil-kt:coil-svg:1.2.0")
     // retrofit
     implementation("com.squareup.retrofit2:retrofit:2.7.2")
     implementation("com.squareup.retrofit2:converter-gson:2.7.2")
@@ -28,7 +27,7 @@ dependencies {
 
     implementation("androidx.paging:paging-runtime-ktx:3.0.0")
     implementation(TestDependencies.jupiterApi)
-
+    implementation ("io.anyline:anylinesdk:31.0.0")
 
     apply(from = "$rootDir/gradle/base-dependencies.gradle.kts")
 }

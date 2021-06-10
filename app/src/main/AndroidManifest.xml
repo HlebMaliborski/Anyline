@@ -3,6 +3,7 @@
     package="com.devloper.squad.anyline">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".SearchApp"
